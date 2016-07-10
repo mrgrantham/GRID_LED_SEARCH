@@ -43,9 +43,7 @@ bool location::operator!=(const location &right) const {
 
 vector<location> location::get_successors(location &grid_bounds) {
 
-
     vector<location> successor_array;
-
 
     for (int x_inc =-1; x_inc <= 1; x_inc++) {
 
@@ -66,10 +64,8 @@ vector<location> location::get_successors(location &grid_bounds) {
                     location new_successor(new_x,new_y);
                     successor_array.push_back(new_successor);
                 }
-
             }
         }
-
     }
 
     return successor_array;

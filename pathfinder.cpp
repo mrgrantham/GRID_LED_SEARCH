@@ -8,6 +8,15 @@
 
 #include "pathfinder.h"
 
+void pathfinder::remove_priors(vector<location> &history, vector<location> &successors){
+
+    for (int prev_visit = 0; prev_visit < (int)history.size(); prev_visit++){
+        // remove returns an iterator to the new end of the vector
+        // then the erase() function deletes the items that were found
+        successors.erase(remove(successors.begin(), successors.end(), history[prev_visit]), successors.end());
+    }
+}
+
 pathfinder::pathfinder(){
     goal = location(); // sets (0,0) location default
     grid_bounds = location();
@@ -16,13 +25,18 @@ pathfinder::pathfinder(){
 pathfinder::pathfinder(location &new_goal, location &new_grid_bounds){
     goal = new_goal;
     grid_bounds = new_grid_bounds;
-    test_display = Grid(new_grid_bounds);
-    test_display.begin();
+
 }
 
 pathfinder::~pathfinder(){
     //delete test_display;
 }
+
+void pathfinder::set(location &new_goal, location &new_grid_bounds){
+  goal = new_goal;
+  grid_bounds = new_goal;
+}
+
 
 void pathfinder::set_goal(location &new_goal){
    goal = new_goal;
@@ -34,95 +48,103 @@ void pathfinder::set_goal(location &new_goal){
 
 void pathfinder::set_bounds(location &new_grid_bounds){
     grid_bounds = new_grid_bounds;
-    test_display.set_bounds(grid_bounds);
-    test_display.begin();
+
+}
+
+
+
+bool pathfinder::search_w_DFS(Search_state &search_state){
+
+    vector<location> &path      = search_state.paths.front();
+    vector<location> &history   = search_state.history;
+
+    vector< vector<location> > &tree      = search_state.search_tree;
+
+    tree.push_back(path.back().get_successors(grid_bounds));
+
+    vector<location> &current_successors = tree.back();
+
+    //cout << "STATE **BEFORE** HISTORY REMOVAL\n" << search_state;
+
+    remove_priors(history, current_successors);
+
+    //cout << "STATE **AFTER** HISTORY REMOVAL\n" << search_state;
+
+
+    if (current_successors.empty()) {
+        tree.pop_back(); // no more successors so move back up tree
+        path.pop_back(); // this location was not the end goal and its successors were a dead end so pop off
+    } else {
+        random_shuffle(current_successors.begin(), current_successors.end());
+        path.push_back(current_successors.back());
+        history.push_back(current_successors.back());
+
+        // now that successor is copied to path it can be removed from the tree of untraversed successors
+        current_successors.pop_back();
+    }
+
+    location end_of_path = path.back(); // copies location to end_of_path
+
+    return goal == end_of_path; // is the last location in the path the goal?
 }
 
 
 
 
 
-void pathfinder::find_path(location &start_point){
-    // Use DFS with random walk for pathing order
-    vector<vector<location> > successors_array;
-    vector<location> potential_path;
-
-    location *current_location = &start_point;
-    vector<location> history; // holds all path references and any places where backtracking took place
-    history.push_back(start_point);
-
-    potential_path.push_back(*current_location);
-
-    successors_array.push_back(current_location->get_successors(grid_bounds));
-    vector<location> *current_successors = &successors_array.back();
-
-    test_display.set_goal(goal.x, goal.y);
-
-    while(*current_location != goal) {
-
-      test_display.draw_path(potential_path);
-      delay(50); 
-
-        bool repeat_visit = false;
-
-        if (!current_successors->empty()) {
 
 
-            // make sure that each selection from the current_successors vector is random
-            random_shuffle(current_successors->begin(), current_successors->end());
+bool pathfinder::search_w_BFS(Search_state &search_state){
 
-            // Check the entire path to see if the next potential path
-            // component has been visited before
-            for(int i = 0; i < history.size(); i++) {
-                if (current_successors->back() == history[i]) {
+    vector<location> &path              = search_state.paths.front();
+    queue<vector <location>> &paths     = search_state.paths;
+    vector<location> &history           = search_state.history;
 
-                    repeat_visit = true;
-                }
+    // maybe use the "tree" vector for storage of the successors to reuse memory
+    vector<location> current_successors(path.back().get_successors(grid_bounds));
 
-            }
+    // remove locations already visited by each specific path
+    remove_priors(history, current_successors);
 
-            if (!repeat_visit) {
+    bool goal_reached = false;
 
-                // if this successor has not been visited before it now becomes
-                // the new current location
-                current_location = &current_successors->back();
+    // cout << "CURRENT PATH: ";
+    // for(auto step: path) {
+    //     cout << " " << step;
+    // }
+    // cout << "\n";
+    //
+    // cout << "CURRENT SUCCESSORS: ";
+    // for(auto suc: current_successors) {
+    //     cout << " " << suc;
+    // }
+    // cout << "\n";
 
-                // current_location successors are the new current successors
-                successors_array.push_back(current_location->get_successors(grid_bounds));
-                current_successors = &successors_array.back();
 
-                // potential path and successors array are both updated
-                // with *current* varables
-                //
-                potential_path.push_back(*current_location);
-                history.push_back(*current_location);
 
-            } else {
+    // split off path into as many new paths as there are successors
+    for (vector<location>::iterator new_step = current_successors.begin(); new_step != current_successors.end(); new_step++) {
 
-                // pop repeat visit off the stack
-                current_successors->pop_back();
-            }
+        // add to list of prior visits
+        history.push_back(*new_step);
 
+        vector<location> temp_path(path);
+
+        temp_path.push_back(*new_step);
+
+        paths.push(temp_path);
+
+        if(*new_step == goal) {
+            search_state.final_path = temp_path;
+            goal_reached = true;
         }
-        else {
 
-            // if the current successors are exhausted then pop them off
-
-            successors_array.pop_back();
-            potential_path.pop_back();
-
-            // current path was dead end
-            // move on level back up the tree
-            current_successors = &successors_array.back();
-            current_location = &potential_path.back();
-
-            // shuffle successors for random walk
-            random_shuffle(current_successors->begin(), current_successors->end());
-
-        }
 
     }
+    paths.pop();
+    // cout << search_state;
 
-    // voided so that it would compile
-    // return potential_path;
+
+    return goal_reached;
+
 }

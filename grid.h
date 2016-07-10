@@ -1,6 +1,7 @@
 #include "location.h"
 #include "WS2801.h"
 #include <vector>
+#include <queue>
 
 
 
@@ -20,11 +21,13 @@ class Grid : public Adafruit_WS2801 {
 
     Grid();
     Grid(location &new_grid_bounds);
+    Grid(int new_grid_width, int new_grid_length);
     void set_bounds(location &new_grid_bounds);
     void set_goal(int x, int y);
     void clear();
     void configure(char new_blank_pixel_symbol, char new_pixel_symbol, char new_goal_pixel);
     void draw_path(vector<location> &path);
+    void draw_paths( queue < vector<location> > paths);
     void set_pixel(int x, int y);
     void set_goal_pixel(int x, int y);
     void unset_pixel(int x, int y);

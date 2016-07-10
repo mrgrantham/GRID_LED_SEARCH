@@ -1,8 +1,10 @@
 #include "location.h"
 #include "pathfinder.h"
+#include "Grid.h"
+#include "Search_state.h"
 
-/*#include <ctime>        // std::time
-#include <cstdlib>      // std::rand, std::srand*/
+#include <ctime>        // std::time
+#include <cstdlib>      // std::rand, std::srand
 
 int myrandom (int i) { return std::rand()%i;};
 
@@ -10,26 +12,61 @@ location grid_bounds(7,7);
 location goal;
 location start_point;
 pathfinder p_finder;
+Grid aGrid(grid_bounds.x,grid_bounds.y);
+
+bool DFS = false;
 
 /*Grid aGrid;*/
 
 void setup() {
-
-
 
   /*Serial.begin(9600);*/
 
   srand ( unsigned ( time(0) ) );
   p_finder.set_bounds(grid_bounds);
 
-
 }
 
 void loop() {
 
-  goal.set( myrandom(6), myrandom(6));
-  start_point.set( myrandom(6), myrandom(6));
-  p_finder.set_goal(goal);
-  p_finder.find_path(start_point);
 
+    goal.set(myrandom(6),myrandom(6));
+    aGrid.set_goal(goal.x, goal.y);
+    p_finder.set(goal, grid_bounds);
+    location start_point(myrandom(6),myrandom(6));
+
+    Search_state search_state(start_point);
+
+    bool found_path = false;
+
+    if(DFS) {
+
+        // DEPTH FIRST SEARCH
+        while (found_path == false) {
+            // cout << "DEPTH FIRST SEARCH\n";
+            // cout << search_state;
+            found_path = p_finder.search_w_DFS(search_state);
+            aGrid.draw_paths(search_state.paths);
+            aGrid.show();
+            aGrid.clear();
+            delay(500);
+        }
+        /*cout << "DEPTH FIRST SEARCH PATH FOUND\n";*/
+        DFS = false;
+    } else {
+
+        // BREADTH FIRST SEARCH
+        while (found_path == false) {
+            // cout << "BREADTH FIRST SEARCH\n";
+            // cout << search_state;
+            found_path = p_finder.search_w_BFS(search_state);
+            aGrid.draw_paths(search_state.paths);
+            aGrid.show();
+            aGrid.clear();
+            delay(500);
+        }
+
+        /*cout << "BREADTH FIRST SEARCH PATH FOUND\n";*/
+        DFS = true;
+    }
 }

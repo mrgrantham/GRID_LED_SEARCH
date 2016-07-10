@@ -12,14 +12,14 @@
 #include <vector>
 #include <algorithm>    // random_shuffle
 #include "location.h"
-#include "grid.h"
+#include "Search_state.h"
 
 
 
 class pathfinder{
     location goal;
     location grid_bounds;
-    Grid test_display;
+    void remove_priors(vector<location> &history, vector<location> &successors);
 
 
 public:
@@ -27,6 +27,7 @@ public:
     pathfinder();
 
     pathfinder(location &new_goal, location &new_grid_bounds);
+    void set(location &new_goal, location &new_grid_bounds);
 
     ~pathfinder();
 
@@ -36,8 +37,9 @@ public:
 
     void set_bounds(location &new_grid_bounds);
 
-    void find_path(location &start_point);
+    bool search_w_DFS(Search_state &search_state); // returns
 
+    bool search_w_BFS(Search_state &search_state);
 
 };
 

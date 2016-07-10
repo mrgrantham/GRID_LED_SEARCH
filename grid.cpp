@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "Grid.h"
 
 Grid::Grid(){
 
@@ -7,6 +7,10 @@ Grid::Grid(){
 Grid::Grid(location &new_grid_bounds){
     grid_bounds = new_grid_bounds;
     updateLength(grid_bounds.x * grid_bounds.y);
+}
+
+Grid::Grid(int new_grid_width, int new_grid_length){
+  grid_bounds.set(new_grid_width,new_grid_length);
 }
 
 void Grid::set_bounds(location &new_grid_bounds){
@@ -36,14 +40,19 @@ void Grid::draw_path(vector<location> &path){
   for (uint32_t i = 0; i < path.size(); i++) {
     this->set_pixel(path[i].x,path[i].y);
   }
+}
 
-  set_goal_pixel(goal.x, goal.y);
+void Grid::draw_paths(queue< vector <location> > paths){
 
-  show();
+    int size = (int)paths.size();
+    vector<location> temp;
 
-  clear();
-  }
-
+    for (int i = 0; i < size; i++) {
+        temp = paths.front();
+        draw_path(temp);
+        paths.pop();
+    }
+}
 
 // This grid map is only for a strand arranged
 // in a sqaure grid that started int top right corner and
