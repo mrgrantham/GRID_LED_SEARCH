@@ -3,10 +3,9 @@
 #include "Grid.h"
 #include "Search_state.h"
 
-#include <ctime>        // std::time
-#include <cstdlib>      // std::rand, std::srand
+/*#include <ctime>        // std::time
+#include <cstdlib>      // std::rand, std::srand*/
 
-int myrandom (int i) { return std::rand()%i;};
 
 location grid_bounds(7,7);
 location goal;
@@ -27,10 +26,10 @@ void setup() {
 void loop() {
 
 
-    goal.set(myrandom(6),myrandom(6));
+    goal.set(random(7),random(7));
     aGrid.set_goal(goal.x, goal.y);
     p_finder.set(goal, grid_bounds);
-    location start_point(myrandom(6),myrandom(6));
+    location start_point(random(7),random(7));
 
     Search_state search_state(start_point);
 

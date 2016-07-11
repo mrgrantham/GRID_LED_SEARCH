@@ -1,2 +1,4 @@
 # particle.ignore
 .ds_store
+._*.*
+.git

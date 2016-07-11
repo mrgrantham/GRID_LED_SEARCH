@@ -6,10 +6,10 @@
 //  Copyright © 2016 TESTING. All rights reserved.
 //
 
-#ifndef Search_state_hpp
-#define Search_state_hpp
+#ifndef Search_state_h
+#define Search_state_h
 
-#include <stdio.h>
+// #include <stdio.h>
 #include <iostream>
 #include <vector>
 #include <queue>

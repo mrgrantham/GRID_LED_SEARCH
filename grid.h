@@ -1,3 +1,8 @@
+
+
+#ifndef grid_h
+#define grid_h
+
 #include "location.h"
 #include "WS2801.h"
 #include <vector>
@@ -34,3 +39,5 @@ class Grid : public Adafruit_WS2801 {
 
 
 };
+
+#endif

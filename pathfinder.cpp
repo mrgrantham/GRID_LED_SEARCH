@@ -70,7 +70,7 @@ bool pathfinder::search_w_DFS(Search_state &search_state){
         tree.pop_back(); // no more successors so move back up tree
         path.pop_back(); // this location was not the end goal and its successors were a dead end so pop off
     } else {
-        random_shuffle(current_successors.begin(), current_successors.end());
+        // random_shuffle(current_successors.begin(), current_successors.end());
         path.push_back(current_successors.back());
         history.push_back(current_successors.back());
 
