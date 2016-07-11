@@ -42,13 +42,8 @@ void pathfinder::set_goal(location &new_goal){
    goal = new_goal;
 }
 
-// void pathfinder::set_start_point(location &new_start_point){
-//   start_point = new_start_point;
-// }
-
 void pathfinder::set_bounds(location &new_grid_bounds){
     grid_bounds = new_grid_bounds;
-
 }
 
 

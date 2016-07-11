@@ -24,7 +24,6 @@ void Grid::set_goal(int x, int y) {
 }
 
 
-
 void Grid::clear() {
   for (int i = 0; i < this->numPixels(); i++){
     setPixelColor(i,default_blank_pixel);
@@ -65,7 +64,6 @@ void Grid::set_pixel(int x, int y) {
 void Grid::set_goal_pixel(int x, int y) {
 
        setPixelColor(grid_map(x,y),default_goal_pixel);
-
 }
 
 void Grid::unset_pixel(int x, int y) {

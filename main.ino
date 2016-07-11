@@ -16,11 +16,8 @@ Grid aGrid(grid_bounds.x,grid_bounds.y);
 
 bool DFS = false;
 
-/*Grid aGrid;*/
-
 void setup() {
 
-  /*Serial.begin(9600);*/
 
   srand ( unsigned ( time(0) ) );
   p_finder.set_bounds(grid_bounds);
@@ -43,22 +40,19 @@ void loop() {
 
         // DEPTH FIRST SEARCH
         while (found_path == false) {
-            // cout << "DEPTH FIRST SEARCH\n";
-            // cout << search_state;
+
             found_path = p_finder.search_w_DFS(search_state);
             aGrid.draw_paths(search_state.paths);
             aGrid.show();
             aGrid.clear();
             delay(500);
         }
-        /*cout << "DEPTH FIRST SEARCH PATH FOUND\n";*/
         DFS = false;
     } else {
 
         // BREADTH FIRST SEARCH
         while (found_path == false) {
-            // cout << "BREADTH FIRST SEARCH\n";
-            // cout << search_state;
+
             found_path = p_finder.search_w_BFS(search_state);
             aGrid.draw_paths(search_state.paths);
             aGrid.show();
@@ -66,7 +60,6 @@ void loop() {
             delay(500);
         }
 
-        /*cout << "BREADTH FIRST SEARCH PATH FOUND\n";*/
         DFS = true;
     }
 }

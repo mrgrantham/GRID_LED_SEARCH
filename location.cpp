@@ -33,14 +33,6 @@ bool location::operator!=(const location &right) const {
     return (this->x != right.x || this->y != right.y);
 }
 
-// not useful outside of testing since the particle core doesnt
-// have a console to output too
-// ostream& operator<<(std::ostream& os, const location& aLoc)
-// {
-//     os << "(" << aLoc.x << ", " << aLoc.y << ")";
-//     return os;
-// }
-
 vector<location> location::get_successors(location &grid_bounds) {
 
     vector<location> successor_array;
