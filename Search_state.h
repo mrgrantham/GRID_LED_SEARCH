@@ -9,8 +9,6 @@
 #ifndef Search_state_h
 #define Search_state_h
 
-// #include <stdio.h>
-#include <iostream>
 #include <vector>
 #include <queue>
 #include "location.h"

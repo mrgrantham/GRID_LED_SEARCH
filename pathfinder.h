@@ -9,12 +9,11 @@
 #ifndef pathfinder_h
 #define pathfinder_h
 
-#include <vector>
-#include <algorithm>    // random_shuffle
+
 #include "location.h"
 #include "Search_state.h"
 
-
+#include <vector>
 
 class pathfinder{
     location goal;

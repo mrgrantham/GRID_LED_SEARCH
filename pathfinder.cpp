@@ -6,7 +6,9 @@
 //  Copyright © 2016 TESTING. All rights reserved.
 //
 
+#include <algorithm>    // random_shuffle
 #include "pathfinder.h"
+
 
 void pathfinder::remove_priors(vector<location> &history, vector<location> &successors){
 
