@@ -1,3 +1,5 @@
+#include "application.h"
+
 #include "location.h"
 #include "pathfinder.h"
 #include "Grid.h"
@@ -20,6 +22,7 @@ void setup() {
 
   srand ( unsigned ( time(0) ) );
   p_finder.set_bounds(grid_bounds);
+  Serial.begin(9600);
 
 }
 
@@ -36,28 +39,41 @@ void loop() {
     bool found_path = false;
 
     if(DFS) {
-
+      Serial.print("\nDFS Starting\n");
         // DEPTH FIRST SEARCH
         while (found_path == false) {
 
             found_path = p_finder.search_w_DFS(search_state);
+            Serial.print("End Search Round\n");
             aGrid.draw_paths(search_state.paths);
+            Serial.print("End Draw\n");
             aGrid.show();
+            Serial.print("End Show\n");
             aGrid.clear();
+            Serial.print("End Clear\n");
+
             delay(500);
         }
+        Serial.print("DFS Endign\n");
+
         DFS = false;
     } else {
-
+        Serial.print("\nBFS Starting\n");
         // BREADTH FIRST SEARCH
         while (found_path == false) {
 
             found_path = p_finder.search_w_BFS(search_state);
+            Serial.print("End Search Round\n");
             aGrid.draw_paths(search_state.paths);
+            Serial.print("End Draw\n");
             aGrid.show();
+            Serial.print("End Show\n");
             aGrid.clear();
+            Serial.print("End Clear\n");
+
             delay(500);
         }
+        Serial.print("BFS Ending\n");
 
         DFS = true;
     }
