@@ -38,7 +38,7 @@ pathfinder::~pathfinder(){
 
 void pathfinder::set(location &new_goal, location &new_grid_bounds){
   goal = new_goal;
-  grid_bounds = new_goal;
+  grid_bounds = new_grid_bounds;
 }
 
 
@@ -98,14 +98,22 @@ bool pathfinder::search_w_BFS(Search_state &search_state){
     Serial.print("Initialize BFS data structures\n");
 
     vector<location> &path              = search_state.paths.front();
-    queue<vector <location>> &paths     = search_state.paths;
+    deque<vector <location>> &paths     = search_state.paths;
     vector<location> &history           = search_state.history;
     Serial.print("==DONE==\n");
+
+    Serial.print("No. PATHS: ");
+    Serial.print(paths.size());
+    Serial.print("\n");
 
     Serial.print("Fetch Successors of Curent\n");
     // maybe use the "tree" vector for storage of the successors to reuse memory
     vector<location> current_successors(path.back().get_successors(grid_bounds));
+
     Serial.print("==DONE==\n");
+    Serial.print("No. Successors: ");
+    Serial.print(current_successors.size());
+    Serial.print("\n");
 
     Serial.print("Remove Prior\n");
 
@@ -113,6 +121,9 @@ bool pathfinder::search_w_BFS(Search_state &search_state){
     remove_priors(history, current_successors);
     Serial.print("==DONE==\n");
 
+    Serial.print("No. Successors: ");
+    Serial.print(current_successors.size());
+    Serial.print("\n");
 
     bool goal_reached = false;
 
@@ -154,7 +165,7 @@ bool pathfinder::search_w_BFS(Search_state &search_state){
 
         Serial.print("Add new path to vector of paths\n");
 
-        paths.push(temp_path);
+        paths.push_back(temp_path);
 
         Serial.print("Size of modified PATHS vector: ");
         Serial.print(paths.size());
@@ -177,10 +188,9 @@ bool pathfinder::search_w_BFS(Search_state &search_state){
 
     Serial.print("Remove the Original Path\n");
 
-    paths.pop();
+    paths.pop_front();
 
     Serial.print("==DONE==\n");
-
 
     return goal_reached;
 

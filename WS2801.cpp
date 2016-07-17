@@ -28,6 +28,7 @@ Example sketch for driving Adafruit WS2801 pixels on the Spark Core!
 /* ========================== Adafruit_WS2801.cpp =========================== */
 
 #include "WS2801.h"
+#include "application.h"
 
 // Example to control WS2801-based RGB LED Modules in a strand or strip
 // Written by Adafruit - MIT license
@@ -143,9 +144,11 @@ uint16_t Adafruit_WS2801::numPixels(void) {
 
 // Change strand length (see notes with empty constructor, above):
 void Adafruit_WS2801::updateLength(uint16_t n) {
+
   if(pixels != NULL) free(pixels); // Free existing data (if any)
   // Allocate new data -- note: ALL PIXELS ARE CLEARED
   numLEDs = ((pixels = (uint8_t *)calloc(n, 3)) != NULL) ? n : 0;
+
   // 'begun' state does not change -- pins retain prior modes
 }
 
@@ -157,6 +160,7 @@ void Adafruit_WS2801::updateOrder(uint8_t order) {
 }
 
 void Adafruit_WS2801::show(void) {
+  Serial.print("\n===SHOWING===\n");
   uint16_t i, nl3 = numLEDs * 3; // 3 bytes per LED
 
   for(i=0; i<nl3; i++) {
@@ -165,6 +169,8 @@ void Adafruit_WS2801::show(void) {
   }
 
   delay(1); // Data is latched by holding clock pin low for 1 millisecond
+  Serial.print("\n=====DONE SHOWING=====\n");
+
 }
 
 // Set pixel color from separate 8-bit R, G, B components:

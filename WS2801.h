@@ -70,7 +70,7 @@ class Adafruit_WS2801 {
   uint32_t
     getPixelColor(uint16_t n);
 
- private:
+ //private:
 
   uint16_t
     numLEDs;

@@ -10,12 +10,12 @@
 #define Search_state_h
 
 #include <vector>
-#include <queue>
+#include <deque>
 #include "location.h"
 
 class Search_state {
 public:
-    queue<vector <location> >    paths;
+    deque<vector <location> >    paths;
     vector <location>           history;
     vector <vector <location> >  search_tree;
     vector <location>           final_path;
