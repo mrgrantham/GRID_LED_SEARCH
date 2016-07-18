@@ -19,13 +19,13 @@ bool DFS = false;
 
 void setup() {
 
-  Serial.begin(9600);
+  //Serial.begin(9600);
   aGrid.set_bounds(grid_bounds);
-  Serial.print("grid_bounds in Setup(): (");
-  Serial.print(grid_bounds.x);
-  Serial.print(", ");
-  Serial.print(grid_bounds.y);
-  Serial.print(")\n");
+  //  Serial.print("grid_bounds in Setup(): (");
+  //  Serial.print(grid_bounds.x);
+  //  Serial.print(", ");
+  //  Serial.print(grid_bounds.y);
+  //  Serial.print(")\n");
 
   aGrid.begin();
 
@@ -55,48 +55,49 @@ void loop() {
     bool found_path = false;
 
     if(DFS) {
-      Serial.print("\n\nDFS Starting\n");
+      //  Serial.print("\n\nDFS Starting\n");
         // DEPTH FIRST SEARCH
         while (found_path == false) {
 
             found_path = p_finder.search_w_DFS(search_state);
-            Serial.print("End Search Round\n");
+            //  Serial.print("End Search Round\n");
             aGrid.draw_paths(search_state.paths);
-            Serial.print("End Draw\n");
+            //  Serial.print("End Draw\n");
+            aGrid.set_goal_pixel();
             aGrid.show();
-            Serial.print("End Show\n");
+            //  Serial.print("End Show\n");
             aGrid.clear();
-            Serial.print("End Clear\n");
+            //  Serial.print("End Clear\n");
 
-            delay(500);
+            delay(200);
         }
-        Serial.print("DFS Endign\n");
+        //  Serial.print("DFS Endign\n");
 
         DFS = false;
     } else {
-        Serial.print("\n\nBFS Starting\n");
+        //  Serial.print("\n\nBFS Starting\n");
         // BREADTH FIRST SEARCH
         while (found_path == false) {
 
             found_path = p_finder.search_w_BFS(search_state);
-            Serial.print("End Search Round\n");
-            Serial.print("No. Paths: ");
-            Serial.print(search_state.paths.size());
-            Serial.print("\n");
+            //  Serial.print("End Search Round\n");
+            //  Serial.print("No. Paths: ");
+            //  Serial.print(search_state.paths.size());
+            //  Serial.print("\n");
             aGrid.draw_paths(search_state.paths);
-            Serial.print("End Draw\n");
-            Serial.print("Print Pixels BEFORE Show\n");
-            aGrid.print_pixels();
+            //  Serial.print("End Draw\n");
+            //  Serial.print("Print Pixels BEFORE Show\n");
+            aGrid.set_goal_pixel();
             aGrid.show();
-            Serial.print("Print Pixels AFTER Show\n");
+            //  Serial.print("Print Pixels AFTER Show\n");
             aGrid.print_pixels();
-            Serial.print("End Show\n");
+            //  Serial.print("End Show\n");
             aGrid.clear();
-            Serial.print("End Clear\n");
+            //  Serial.print("End Clear\n");
 
-            delay(500);
+            delay(30);
         }
-        Serial.print("BFS Ending\n");
+        //  Serial.print("BFS Ending\n");
 
         DFS = true;
     }

@@ -36,6 +36,7 @@ class Grid : public Adafruit_WS2801 {
     void draw_paths( const deque < vector<location> > &paths);
     void set_pixel(int x, int y);
     void set_goal_pixel(int x, int y);
+    void set_goal_pixel();
     void unset_pixel(int x, int y);
 
 

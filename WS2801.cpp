@@ -160,7 +160,7 @@ void Adafruit_WS2801::updateOrder(uint8_t order) {
 }
 
 void Adafruit_WS2801::show(void) {
-  Serial.print("\n===SHOWING===\n");
+  //  Serial.print("\n===SHOWING===\n");
   uint16_t i, nl3 = numLEDs * 3; // 3 bytes per LED
 
   for(i=0; i<nl3; i++) {
@@ -169,7 +169,7 @@ void Adafruit_WS2801::show(void) {
   }
 
   delay(1); // Data is latched by holding clock pin low for 1 millisecond
-  Serial.print("\n=====DONE SHOWING=====\n");
+  //  Serial.print("\n=====DONE SHOWING=====\n");
 
 }
 

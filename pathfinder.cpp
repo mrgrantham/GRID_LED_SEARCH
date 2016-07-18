@@ -74,7 +74,7 @@ bool pathfinder::search_w_DFS(Search_state &search_state){
         tree.pop_back(); // no more successors so move back up tree
         path.pop_back(); // this location was not the end goal and its successors were a dead end so pop off
     } else {
-        // random_shuffle(current_successors.begin(), current_successors.end());
+        random_shuffle(current_successors.begin(), current_successors.end());
         path.push_back(current_successors.back());
         history.push_back(current_successors.back());
 
@@ -95,102 +95,105 @@ bool pathfinder::search_w_DFS(Search_state &search_state){
 
 bool pathfinder::search_w_BFS(Search_state &search_state){
 
-    Serial.print("Initialize BFS data structures\n");
+    //  Serial.print("Initialize BFS data structures\n");
 
     vector<location> &path              = search_state.paths.front();
     deque<vector <location>> &paths     = search_state.paths;
     vector<location> &history           = search_state.history;
-    Serial.print("==DONE==\n");
+    //  Serial.print("==DONE==\n");
 
-    Serial.print("No. PATHS: ");
-    Serial.print(paths.size());
-    Serial.print("\n");
+    //  Serial.print("No. PATHS: ");
+    //  Serial.print(paths.size());
+    //  Serial.print("\n");
 
-    Serial.print("Fetch Successors of Curent\n");
+    //  Serial.print("Fetch Successors of Curent\n");
     // maybe use the "tree" vector for storage of the successors to reuse memory
     vector<location> current_successors(path.back().get_successors(grid_bounds));
 
-    Serial.print("==DONE==\n");
-    Serial.print("No. Successors: ");
-    Serial.print(current_successors.size());
-    Serial.print("\n");
+    //  Serial.print("==DONE==\n");
+    //  Serial.print("No. Successors: ");
+    //  Serial.print(current_successors.size());
+    //  Serial.print("\n");
 
-    Serial.print("Remove Prior\n");
+    //  Serial.print("Remove Prior\n");
 
     // remove locations already visited by each specific path
     remove_priors(history, current_successors);
-    Serial.print("==DONE==\n");
 
-    Serial.print("No. Successors: ");
-    Serial.print(current_successors.size());
-    Serial.print("\n");
+    random_shuffle(current_successors.begin(), current_successors.end());
+
+    //  Serial.print("==DONE==\n");
+
+    //  Serial.print("No. Successors: ");
+    //  Serial.print(current_successors.size());
+    //  Serial.print("\n");
 
     bool goal_reached = false;
 
-    Serial.print("Create New Path Branches\n");
+    //  Serial.print("Create New Path Branches\n");
 
     // split off path into as many new paths as there are successors
     for (vector<location>::iterator new_step = current_successors.begin(); new_step != current_successors.end(); new_step++) {
 
-      Serial.print("Iterating through successor\n");
+      //  Serial.print("Iterating through successor\n");
 
 
-      Serial.print("Push Successor onto list of Prior Visits\n");
-      Serial.print("Size of Prior visit list BEFORE: ");
-      Serial.print(history.size());
-      Serial.print("\n");
+      //  Serial.print("Push Successor onto list of Prior Visits\n");
+      //  Serial.print("Size of Prior visit list BEFORE: ");
+      //  Serial.print(history.size());
+      //  Serial.print("\n");
         // add to list of prior visits
         history.push_back(*new_step);
 
-      Serial.print("Size of Prior visit list AFTER: ");
-      Serial.print(history.size());
-      Serial.print("\n");
+      //  Serial.print("Size of Prior visit list AFTER: ");
+      //  Serial.print(history.size());
+      //  Serial.print("\n");
 
 
-      Serial.print("Create new vector based on original path to add this successor to\n");
+      //  Serial.print("Create new vector based on original path to add this successor to\n");
         vector<location> temp_path(path);
-        Serial.print("Size of new vector: ");
-        Serial.print(temp_path.size());
-        Serial.print("\n");
+        //  Serial.print("Size of new vector: ");
+        //  Serial.print(temp_path.size());
+        //  Serial.print("\n");
 
 
-        Serial.print("Add successor to new path\n");
+        //  Serial.print("Add successor to new path\n");
 
         temp_path.push_back(*new_step);
 
-        Serial.print("Size of modified PATH vector: ");
-        Serial.print(temp_path.size());
-        Serial.print("\n");
+        //  Serial.print("Size of modified PATH vector: ");
+        //  Serial.print(temp_path.size());
+        //  Serial.print("\n");
 
 
-        Serial.print("Add new path to vector of paths\n");
+        //  Serial.print("Add new path to vector of paths\n");
 
         paths.push_back(temp_path);
 
-        Serial.print("Size of modified PATHS vector: ");
-        Serial.print(paths.size());
-        Serial.print("\n");
+        //  Serial.print("Size of modified PATHS vector: ");
+        //  Serial.print(paths.size());
+        //  Serial.print("\n");
 
 
-        Serial.print("Check if current successor matchs the saught\nafter goal state");
+        //  Serial.print("Check if current successor matchs the saught\nafter goal state");
 
         if(*new_step == goal) {
             search_state.final_path = temp_path;
             goal_reached = true;
-            Serial.print("==GOAL FOUND==\n");
+            //  Serial.print("==GOAL FOUND==\n");
 
         }
 
-        Serial.print("End of Successor loop iteration\n");
+        //  Serial.print("End of Successor loop iteration\n");
 
     }
-    Serial.print("==DONE==\n");
+    //  Serial.print("==DONE==\n");
 
-    Serial.print("Remove the Original Path\n");
+    //  Serial.print("Remove the Original Path\n");
 
     paths.pop_front();
 
-    Serial.print("==DONE==\n");
+    //  Serial.print("==DONE==\n");
 
     return goal_reached;
 
